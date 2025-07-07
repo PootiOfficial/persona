@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona 5 Royal - Persona Compendium</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #e60012;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 300px;
+        }
+        nav {
+            background-color: #1a1a1a;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #e60012;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e60012;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        #search-bar {
+            padding: 12px;
+            width: 100%;
+            max-width: 500px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #e60012;
+            border-color: #e60012;
+        }
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .persona-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .persona-card:hover {
+            transform: translateY(-5px);
+        }
+        .persona-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            object-position: top;
+        }
+        .persona-info {
+            padding: 15px;
+        }
+        .persona-info h3 {
+            color: #e60012;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .persona-info p {
+            margin: 5px 0;
+        }
+        .arcana {
+            font-weight: bold;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #777;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #e60012;
+        }
+        .persona-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        .persona-image {
+            background-color: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .persona-image img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .persona-stats h3 {
+            color: #e60012;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .stat-item {
+            background-color: #222;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .elemental-affinities {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .affinity-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #222;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .affinity-name {
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .affinity-value {
+            font-size: 16px;
+        }
+        .skills-list {
+            margin-top: 15px;
+        }
+        .skill-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            background-color: #222;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 0;
+        }
+        .skill-info {
+            display: flex;
+            flex-direction: column;
+            background-color: #222;
+            padding: 0 12px 8px 12px;
+            border-radius: 0 0 5px 5px;
+            margin-bottom: 8px;
+        }
+        .skill-level {
+            color: #e60012;
+            font-weight: bold;
+        }
+        .skill-cost {
+            text-align: right;
+        }
+        .fusion-recipes {
+            margin-top: 15px;
+        }
+        .recipe-item {
+            background-color: #222;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+        .resist-weak {
+            font-weight: bold;
+        }
+        .resist-weak.wk {
+            color: #ff7070;
+        }
+        .resist-weak.rs {
+            color: #70a0ff;
+        }
+        .resist-weak.nu {
+            color: #b0b0b0;
+        }
+        .resist-weak.rp {
+            color: #70ff70;
+        }
+        .resist-weak.ab {
+            color: #ffff70;
+        }
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/General/Logo.png" alt="Persona 5 Royal Logo" class="logo">
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="palaces.html">Palaces</a>
+        <a href="compendium.html">Persona Compendium</a>
+        <a href="confidants.html">Confidants/Social Links</a>
+        <a href="schoolanswers.html">Class answers</a>
+    </nav>
+    
+    <div class="container">
+        <h1>Persona Compendium</h1>
+        
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Nach Persona suchen...">
+        </div>
+        
+        <div class="filter-container">
+            <button class="filter-btn active" data-arcana="all">Alle</button>
+            <button class="filter-btn" data-arcana="fool">Fool</button>
+            <button class="filter-btn" data-arcana="magician">Magician</button>
+            <button class="filter-btn" data-arcana="priestess">Priestess</button>
+            <button class="filter-btn" data-arcana="empress">Empress</button>
+            <button class="filter-btn" data-arcana="emperor">Emperor</button>
+            <button class="filter-btn" data-arcana="hierophant">Hierophant</button>
+            <button class="filter-btn" data-arcana="lovers">Lovers</button>
+            <button class="filter-btn" data-arcana="chariot">Chariot</button>
+            <button class="filter-btn" data-arcana="justice">Justice</button>
+            <button class="filter-btn" data-arcana="hermit">Hermit</button>
+            <button class="filter-btn" data-arcana="fortune">Fortune</button>
+            <button class="filter-btn" data-arcana="strength">Strength</button>
+            <button class="filter-btn" data-arcana="hanged">Hanged Man</button>
+            <button class="filter-btn" data-arcana="death">Death</button>
+            <button class="filter-btn" data-arcana="temperance">Temperance</button>
+            <button class="filter-btn" data-arcana="devil">Devil</button>
+            <button class="filter-btn" data-arcana="tower">Tower</button>
+            <button class="filter-btn" data-arcana="star">Star</button>
+            <button class="filter-btn" data-arcana="moon">Moon</button>
+            <button class="filter-btn" data-arcana="sun">Sun</button>
+            <button class="filter-btn" data-arcana="judgement">Judgement</button>
+            <button class="filter-btn" data-arcana="faith">Faith</button>
+            <button class="filter-btn" data-arcana="councillor">Councillor</button>
+            <button class="filter-btn" data-arcana="world">World</button>
+        </div>
+        
+        <div class="persona-grid" id="persona-grid">
+            <!-- Personas werden hier dynamisch eingefügt -->
+        </div>
+    </div>
+    
+    <!-- Modal für Persona-Details -->
+    <div id="persona-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="persona-detail-content">
+                <!-- Persona-Details werden hier dynamisch eingefügt -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>This Persona 5 Royal fan site is an unofficial project. All rights to Persona 5 Royal are owned by ATLUS and SEGA.</p>
+        <p>© 2025 Persona 5 Royal Fansite</p>
+    </footer>
+    
+    <script>
+        // Persona-Datenbank
+        const personas = [
+            {
+                id: 1,
+                name: "Arsène",
+                arcana: "fool",
+                image: "images/Compendium/Arsene.png",
+                image2: "images/Compendium/Arsene.png",
+                level: 1,
+                stats: {
+                    strength: 2,
+                    magic: 2,
+                    endurance: 2,
+                    agility: 3,
+                    luck: 1
+                },
+                affinities: {
+                    physical: "-",
+                    gun: "-",
+                    fire: "-",
+                    ice: "wk",
+                    electric: "-",
+                    wind: "-",
+                    psychic: "-",
+                    nuclear: "-",
+                    bless: "wk",
+                    curse: "rs"
+                },
+                skills: [
+                    { name: "Eiha", type: "Curse", cost: "4 SP", description: "Leichter Fluch-Schaden an 1 Feind", level: "Initial" },
+                    { name: "Cleave", type: "Physical", cost: "6% HP", description: "Leichter physischer Schaden an 1 Feind", level: "Initial" },
+                    { name: "Sukunda", type: "Support", cost: "8 SP", description: "Verringert Ausweichen/Agilität von 1 Feind für 3 Runden", level: 4 }
+                ],
+                fusion: [
+                    "Joker's basic persona",
+                    "Can be obtained by fusing Obariyon + Pixie"
+                ],
+                description: "Arsène is named after the fictional gentleman thief Arsène Lupin and represents the rebellious side of the protagonist."
+            },
+            {
+                id: 2,
+                name: "Jack Frost",
+                arcana: "magician",
+                image: "images/Compendium/JackFrost.png",
+                image2: "images/Compendium/JackFrost.png",
+                level: 11,
+                stats: {
+                    strength: 7,
+                    magic: 8,
+                    endurance: 7,
+                    agility: 8,
+                    luck: 7
+                },
+                affinities: {
+                    physical: "-",
+                    gun: "-",
+                    fire: "wk",
+                    ice: "nu",
+                    electric: "-",
+                    wind: "-",
+                    psychic: "-",
+                    nuclear: "-",
+                    bless: "-",
+                    curse: "-"
+                },
+                skills: [
+                    { name: "Bufu", type: "Ice", cost: "4 SP", description: "Leichter Eis-Schaden an 1 Feind", level: "Initial" },
+                    { name: "Mabufu", type: "Ice", cost: "10 SP", description: "Leichter Eis-Schaden an allen Feinden", level: 12 },
+                    { name: "Ice Break", type: "Support", cost: "15 SP", description: "Entfernt Eisresistenz von 1 Feind", level: 14 }
+                ],
+                fusion: [
+                    "Jack-o'-Lantern + Koropokkuru",
+                    "Genbu + Koropokkuru"
+                ],
+                description: "A frosty elemental creature with the characteristic 'Hee-ho!' cry, Jack Frost is a popular mascot in Atlus games and can be found in many Shin Megami Tensei titles."
+            },
+            {
+                id: 3,
+                name: "Pixie",
+                arcana: "lovers",
+                image: "images/Compendium/Pixie.png",
+                image2: "images/Compendium/Pixie2.png",
+                level: 2,
+                stats: {
+                    strength: 1,
+                    magic: 3,
+                    endurance: 3,
+                    agility: 4,
+                    luck: 2
+                },
+                affinities: {
+                    physical: "-",
+                    gun: "-",
+                    fire: "-",
+                    ice: "wk",
+                    electric: "rs",
+                    wind: "-",
+                    psychic: "-",
+                    nuclear: "-",
+                    bless: "-",
+                    curse: "wk"
+                },
+                skills: [
+                    { name: "Zio", type: "Electric", cost: "4 SP", description: "Leichter Elektro-Schaden an 1 Feind", level: "Initial" },
+                    { name: "Dia", type: "Healing", cost: "3 SP", description: "Heilt leichte HP-Schäden eines Verbündeten", level: "Initial" },
+                    { name: "Patra", type: "Healing", cost: "4 SP", description: "Heilt Verwirrungs-Status eines Verbündeten", level: 3 }
+                ],
+                fusion: [
+                    "Arsène + Agathion",
+                    "Mandrake + Bicorn"
+                ],
+                description: "A small fairy from Celtic folklore, pixies are known for their playfulness and sometimes mischievous pranks."
+            },
+            {
+                id: 4,
+                name: "Satanael",
+                arcana: "fool",
+                image: "images/Compendium/Satanael.png",
+                image2: "images/Compendium/Satanael.png",
+                level: 95,
+                stats: {
+                    strength: 63,
+                    magic: 60,
+                    endurance: 59,
+                    agility: 56,
+                    luck: 54
+                },
+                affinities: {
+                    physical: "rs",
+                    gun: "rs",
+                    fire: "rs",
+                    ice: "rs",
+                    electric: "rs",
+                    wind: "rs",
+                    psychic: "rs",
+                    nuclear: "rs",
+                    bless: "rs",
+                    curse: "rs"
+                },
+                skills: [
+                    { name: "Cosmic Flare", type: "Nuclear", cost: "48 SP", description: "Schwerer nuklearer Schaden an allen Feinden", level: "Initial" },
+                    { name: "Black Viper", type: "Almighty", cost: "48 SP", description: "Schwerer unaufhaltsamer Schaden an 1 Feind", level: "Initial" },
+                    { name: "Heat Riser", type: "Support", cost: "30 SP", description: "Erhöht Angriff, Verteidigung und Ausweichen eines Verbündeten für 3 Runden", level: "Initial" },
+                    { name: "Tyrant's Mind", type: "Passive", cost: "-", description: "Erhöht den Schaden aller Angriffe um 25%", level: 96 }
+                ],
+                fusion: [
+                    "Fusion von Lucifer, Anubis, Ananta, Trumpeter, Michael und Satan in NG+",
+                    "Nur durch spezielle Fusion verfügbar"
+                ],
+                description: "The ultimate persona of the protagonist. Satanael is the rebellious form of the god from Gnostic teachings, who rebels against the Demiurge and brings wisdom to humanity."
+            },
+            {
+                id: 5,
+                name: "Izanagi-no-Okami",
+                arcana: "world",
+                image: "images/Compendium/IzanagiNoOkami.png",
+                image2: "images/Compendium/IzanagiNoOkami.png",
+                level: 80,
+                stats: {
+                    strength: 50,
+                    magic: 54,
+                    endurance: 53,
+                    agility: 52,
+                    luck: 46
+                },
+                affinities: {
+                    physical: "-",
+                    gun: "-",
+                    fire: "-",
+                    ice: "-",
+                    electric: "-",
+                    wind: "-",
+                    psychic: "-",
+                    nuclear: "-",
+                    bless: "nu",
+                    curse: "nu"
+                },
+                skills: [
+                    { name: "Myriad Truths", type: "Almighty", cost: "40 SP", description: "Schwerer unaufhaltsamer Schaden an allen Feinden, 3 Treffer", level: "Initial" },
+                    { name: "Victory Cry", type: "Passive", cost: "-", description: "Stellt HP und SP vollständig nach einem erfolgreichen Kampf wieder her", level: "Initial" },
+                    { name: "Concentrate", type: "Support", cost: "15 SP", description: "Erhöht den nächsten magischen Angriff um 250%", level: 82 }
+                ],
+                fusion: [
+                    "DLC-Persona (Nur verfügbar nach Kauf des DLC)",
+                    "Nur durch spezielle Fusion verfügbar"
+                ],
+                description: "The ultimate form of the god Izanagi from Shin Megami Tensei: Persona 4. This version of the Persona is available through DLC in Persona 5 Royal."
+            },
+            {
+                id: 6,
+                name: "Yoshitsune",
+                arcana: "tower",
+                image: "images/Compendium/Yoshitsune.png",
+                image2: "images/Compendium/Yoshitsune.png",
+                level: 79,
+                stats: {
+                    strength: 58,
+                    magic: 38,
+                    endurance: 44,
+                    agility: 53,
+                    luck: 48
+                },
+                affinities: {
+                    physical: "rs",
+                    gun: "-",
+                    fire: "-",
+                    ice: "-",
+                    electric: "rs",
+                    wind: "wk",
+                    psychic: "-",
+                    nuclear: "-",
+                    bless: "nu",
+                    curse: "rs"
+                },
+                skills: [
+                    { name: "Hassou Tobi", type: "Physical", cost: "25% HP", description: "Mittlerer physischer Schaden an allen Feinden, 8 Treffer", level: "Initial" },
+                    { name: "Charge", type: "Support", cost: "15 SP", description: "Erhöht den nächsten physischen Angriff um 250%", level: "Initial" },
+                    { name: "Arms Master", type: "Passive", cost: "-", description: "Reduziert HP-Kosten für physische Fähigkeiten um 50%", level: 81 }
+                ],
+                fusion: [
+                    "Arahabaki + Yatagarasu + Futsunushi",
+                    "Okuninushi + Orthrus + Koumokuten"
+                ],
+                description: "A legendary Japanese samurai, known for his decisive victory in the Battle of Dan-no-ura. He is one of the most powerful physical attack Personas in the game."
+            }
+        ];
+
+        // DOM-Elemente
+        const personaGrid = document.getElementById('persona-grid');
+        const searchBar = document.getElementById('search-bar');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const modal = document.getElementById('persona-modal');
+        const modalContent = document.getElementById('persona-detail-content');
+        const closeBtn = document.querySelector('.close-btn');
+        
+        // Personen zum Grid hinzufügen
+        function renderPersonas(personasToRender) {
+            personaGrid.innerHTML = '';
+            
+            if (personasToRender.length === 0) {
+                personaGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 30px;">No personas found.</p>';
+                return;
+            }
+            
+            personasToRender.forEach(persona => {
+                const personaCard = document.createElement('div');
+                personaCard.className = 'persona-card';
+                personaCard.dataset.id = persona.id;
+                
+                personaCard.innerHTML = `
+                    <img src="${persona.image2}" alt="${persona.name}">
+                    <div class="persona-info">
+                        <h3>${persona.name}</h3>
+                        <p><span class="arcana">Arcana:</span> ${capitalizeFirstLetter(persona.arcana)}</p>
+                        <p>Level: ${persona.level}</p>
+                    </div>
+                `;
+                
+                personaCard.addEventListener('click', () => {
+                    showPersonaDetails(persona);
+                });
+                
+                personaGrid.appendChild(personaCard);
+            });
+        }
+        
+        // Modal mit Persona-Details anzeigen
+        function showPersonaDetails(persona) {
+            modalContent.innerHTML = `
+                <div class="persona-details">
+                    <div class="persona-image">
+                        <img src="${persona.image}" alt="${persona.name}">
+                    </div>
+                    <div class="persona-stats">
+                        <h2>${persona.name}</h2>
+                        <p><span class="arcana">Arcana:</span> ${capitalizeFirstLetter(persona.arcana)}</p>
+                        <p>Level: ${persona.level}</p>
+                        
+                        <h3>Statistics</h3>
+                        <div class="stat-grid">
+                            <div class="stat-item">Strength: ${persona.stats.strength}</div>
+                            <div class="stat-item">Magic: ${persona.stats.magic}</div>
+                            <div class="stat-item">Endurance: ${persona.stats.endurance}</div>
+                            <div class="stat-item">Agility: ${persona.stats.agility}</div>
+                            <div class="stat-item">Luck: ${persona.stats.luck}</div>
+                        </div>
+                        
+                        <h3>Elemental Affinities</h3>
+                        <div class="elemental-affinities">
+                            ${generateAffinityHTML(persona.affinities)}
+                        </div>
+                        
+                        <h3>Abilities</h3>
+                        <div class="skills-list">
+                            ${generateSkillsHTML(persona.skills)}
+                        </div>
+                        
+                        <h3>Fusion</h3>
+                        <div class="fusion-recipes">
+                            ${generateFusionHTML(persona.fusion)}
+                        </div>
+                        
+                        <h3>Description</h3>
+                        <p>${persona.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+        
+        // Affinitäten HTML generieren
+        function generateAffinityHTML(affinities) {
+            let html = '';
+            
+            for (const [element, value] of Object.entries(affinities)) {
+                const displayValue = getAffinityDisplay(value);
+                html += `
+                    <div class="affinity-item">
+                        <div class="affinity-name">${capitalizeFirstLetter(element)}</div>
+                        <div class="affinity-value resist-weak ${value}">${displayValue}</div>
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+        
+        // Fähigkeiten HTML generieren mit deutlich sichtbarer Level-Information
+        function generateSkillsHTML(skills) {
+            let html = '';
+            
+            skills.forEach(skill => {
+                html += `
+                    <div class="skill-item">
+                        <div class="skill-name">${skill.name}</div>
+                        <div class="skill-type">${skill.type}</div>
+                        <div class="skill-level">Level: ${skill.level}</div>
+                        <div class="skill-cost">${skill.cost}</div>
+                    </div>
+                    <div class="skill-info">
+                        <div style="color: #aaa; font-size: 14px;">${skill.description}</div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        // Fusion HTML generieren
+        function generateFusionHTML(fusion) {
+            let html = '';
+            
+            fusion.forEach(recipe => {
+                html += `<div class="recipe-item">${recipe}</div>`;
+            });
+            
+            return html;
+        }
+        
+        // Affinitätsanzeige konvertieren
+        function getAffinityDisplay(value) {
+            const affinityMap = {
+                '-': '-',
+                'wk': 'Wk',
+                'rs': 'Rs',
+                'nu': 'Nu',
+                'rp': 'Rp',
+                'ab': 'Ab'
+            };
+            
+            return affinityMap[value] || value;
+        }
+        
+        // Helper-Funktion zur Großschreibung
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        
+        // Event-Listener
+        searchBar.addEventListener('input', () => {
+            const searchTerm = searchBar.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.arcana;
+            
+            filterPersonas(searchTerm, activeFilter);
+        });
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const searchTerm = searchBar.value.toLowerCase();
+                const activeFilter = button.dataset.arcana;
+                
+                filterPersonas(searchTerm, activeFilter);
+            });
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Filterung der Personas
+        function filterPersonas(searchTerm, arcanaFilter) {
+            let filteredPersonas = personas;
+            
+            if (arcanaFilter && arcanaFilter !== 'all') {
+                filteredPersonas = filteredPersonas.filter(persona => persona.arcana === arcanaFilter);
+            }
+            
+            if (searchTerm) {
+                filteredPersonas = filteredPersonas.filter(persona => 
+                    persona.name.toLowerCase().includes(searchTerm) || 
+                    persona.arcana.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderPersonas(filteredPersonas);
+        }
+        
+        // Initial alle Personas laden
+        renderPersonas(personas);
+    </script>
+</body>
+</html>

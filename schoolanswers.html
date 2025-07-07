@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona 5 Royal - Class answers Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #e60012;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 300px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            background-color: #1a1a1a;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #e60012;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e60012;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Suchfeld */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-box {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            width: 300px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #e60012;
+            box-shadow: 0 0 8px rgba(230, 0, 18, 0.5);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: #e60012;
+            border-bottom: 3px solid #e60012;
+        }
+        .tab:hover {
+            color: #e60012;
+        }
+
+        /* Questions Grid */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .question-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0,0,0,0.5);
+        }
+        .question-info {
+            padding: 20px;
+        }
+        .question-info h2 {
+            color: #e60012;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .question-text {
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        .correct-answer {
+            background-color: #2d5016;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .correct-answer .answer-label {
+            color: #4caf50;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .date-badge {
+            display: inline-block;
+            background-color: #e60012;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .subject-badge {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .stats-reward {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .stats-reward .reward-label {
+            color: #e60012;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .knowledge-icon {
+            color: #4fc3f7;
+            margin-right: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #777;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #e60012;
+        }
+        .question-details h2 {
+            color: #e60012;
+            margin-top: 0;
+        }
+        .all-answers {
+            margin-top: 20px;
+        }
+        .answer-option {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+        }
+        .answer-option.correct {
+            border-color: #4caf50;
+            background-color: #2d5016;
+        }
+        .answer-option.incorrect {
+            border-color: #f44336;
+            background-color: #5d1a1a;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .questions-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/General/Logo.png" alt="Persona 5 Royal Logo" class="logo">
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="palaces.html">Paläste</a>
+        <a href="compendium.html">Persona Compendium</a>
+        <a href="confidants.html">Confidants/Social Links</a>
+        <a href="school-answers.html">Class answers</a>
+    </nav>
+    
+    <div class="container">
+        <h1>Schulantworten & Prüfungsfragen</h1>
+        
+        <div class="intro">
+            <p>Hier findest du alle richtigen Antworten für Schulfragen und Prüfungen in Persona 5 Royal. Richtige Antworten erhöhen deine Wissens-Statistik und helfen dir dabei, ein besserer Student zu werden.</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="question-search" class="search-box" placeholder="Suche nach Frage oder Datum...">
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" data-filter="all">Alle Fragen</button>
+            <button class="tab" data-filter="april">April</button>
+            <button class="tab" data-filter="may">Mai</button>
+            <button class="tab" data-filter="june">Juni</button>
+            <button class="tab" data-filter="july">Juli</button>
+            <button class="tab" data-filter="exam">Prüfungen</button>
+        </div>
+        
+        <div class="questions-grid" id="questions-grid">
+            <!-- Fragen werden hier dynamisch eingefügt -->
+        </div>
+    </div>
+    
+    <!-- Modal für Fragen-Details -->
+    <div id="question-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="question-detail-content">
+                <!-- Fragen-Details werden hier dynamisch eingefügt -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Diese Persona 5 Royal Fanseite ist ein inoffizielles Projekt. Alle Rechte an Persona 5 Royal liegen bei ATLUS und SEGA.</p>
+        <p>© 2025 Persona 5 Royal Fanseite</p>
+    </footer>
+    
+    <script>
+        // Beispiel-Daten für Schulantworten
+        const schoolQuestions = [
+            {
+                id: 1,
+                date: "12. April",
+                month: "april",
+                type: "class",
+                subject: "Geschichte",
+                question: "Welches bekannte historische Ereignis ist die Vorlage für die Phrase 'Stealing someone's thunder'?",
+                options: [
+                    "Ein Theaterregisseur, der Donnereffekte entwickelte",
+                    "Napoleon Bonapartes Schlachtstrategien",
+                    "Die Erfindung des Blitzableiters",
+                    "Ein berühmter Piratenkapitän"
+                ],
+                correctAnswer: 0,
+                correctText: "Ein Theaterregisseur, der Donnereffekte entwickelte",
+                explanation: "Die Phrase geht auf John Dennis zurück, einen Theaterregisseur, der spezielle Donnereffekte entwickelte, die später von anderen Theatern kopiert wurden.",
+                reward: "+1 Wissen",
+                knowledgePoints: 1
+            },
+            {
+                id: 2,
+                date: "19. April",
+                month: "april", 
+                type: "class",
+                subject: "Kunst",
+                question: "Was ist der Grund dafür, dass die meisten Menschen nicht zwischen den Farben auf der japanischen Flagge unterscheiden können?",
+                options: [
+                    "Rot-Grün-Farbenblindheit",
+                    "Die Farben sind zu ähnlich",
+                    "Kulturelle Unterschiede in der Farbwahrnehmung",
+                    "Schlechte Druckqualität"
+                ],
+                correctAnswer: 0,
+                correctText: "Rot-Grün-Farbenblindheit",
+                explanation: "Rot-Grün-Farbenblindheit ist die häufigste Form der Farbenblindheit und betrifft hauptsächlich die Unterscheidung zwischen roten und grünen Farbtönen.",
+                reward: "+1 Wissen",
+                knowledgePoints: 1
+            },
+            {
+                id: 3,
+                date: "23. April",
+                month: "april",
+                type: "class", 
+                subject: "Geschichte",
+                question: "Welche Frau wird als die erste Frau in Japan bezeichnet, die eine Universität besuchte?",
+                options: [
+                    "Tsuda Umeko",
+                    "Yoshioka Yayoi", 
+                    "Yamakawa Sutematsu",
+                    "Shimoda Utako"
+                ],
+                correctAnswer: 0,
+                correctText: "Tsuda Umeko",
+                explanation: "Tsuda Umeko war eine Pionierin der Frauenbildung in Japan und gründete das Tsuda College für Frauen.",
+                reward: "+1 Wissen",
+                knowledgePoints: 1
+            },
+            {
+                id: 4,
+                date: "11. Mai - Prüfung 1",
+                month: "may",
+                type: "exam",
+                subject: "Prüfung",
+                question: "Was war der Name des anderen berühmten Roman-Autors, den Sherlock Holmes' Autor Sir Arthur Conan Doyle verdächtigt hat?",
+                options: [
+                    "Agatha Christie",
+                    "H.G. Wells", 
+                    "George Orwell",
+                    "Jules Verne"
+                ],
+                correctAnswer: 1,
+                correctText: "H.G. Wells",
+                explanation: "Sir Arthur Conan Doyle verdächtigte H.G. Wells in einer realen historischen Kontroverse.",
+                reward: "+1 Wissen",
+                knowledgePoints: 1
+            }
+        ];
+
+        // DOM-Elemente
+        const questionsGrid = document.getElementById('questions-grid');
+        const questionModal = document.getElementById('question-modal');
+        const questionDetailContent = document.getElementById('question-detail-content');
+        const closeBtn = document.querySelector('.close-btn');
+        const tabs = document.querySelectorAll('.tab');
+        const searchBox = document.getElementById('question-search');
+
+        // Aktiver Filter
+        let activeFilter = 'all';
+
+        // Fragen rendern
+        function renderQuestions() {
+            questionsGrid.innerHTML = '';
+            
+            let filteredQuestions = schoolQuestions;
+            
+            // Filter anwenden
+            if (activeFilter !== 'all') {
+                filteredQuestions = schoolQuestions.filter(question => 
+                    question.month === activeFilter || question.type === activeFilter
+                );
+            }
+            
+            // Suchfilter anwenden
+            const searchTerm = searchBox.value.toLowerCase();
+            if (searchTerm) {
+                filteredQuestions = filteredQuestions.filter(question => 
+                    question.question.toLowerCase().includes(searchTerm) || 
+                    question.date.toLowerCase().includes(searchTerm) ||
+                    question.subject.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Karten erstellen
+            filteredQuestions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card fade-in';
+                questionCard.style.animationDelay = `${index * 0.05}s`;
+                
+                questionCard.innerHTML = `
+                    <div class="question-info">
+                        <div class="date-badge">${question.date}</div>
+                        <span class="subject-badge">${question.subject}</span>
+                        <h2>${question.question}</h2>
+                        
+                        <div class="correct-answer">
+                            <div class="answer-label">✓ Richtige Antwort:</div>
+                            ${question.correctText}
+                        </div>
+                        
+                        <div class="stats-reward">
+                            <div class="reward-label">Belohnung:</div>
+                            <span class="knowledge-icon">🧠</span>${question.reward}
+                        </div>
+                    </div>
+                `;
+                
+                questionCard.addEventListener('click', () => {
+                    openQuestionModal(question);
+                });
+                
+                questionsGrid.appendChild(questionCard);
+            });
+            
+            // Keine Ergebnisse anzeigen
+            if (filteredQuestions.length === 0) {
+                questionsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Keine Fragen gefunden.</p>';
+            }
+        }
+
+        // Modal öffnen mit Details der ausgewählten Frage
+        function openQuestionModal(question) {
+            let optionsHTML = '';
+            question.options.forEach((option, index) => {
+                const isCorrect = index === question.correctAnswer;
+                const cssClass = isCorrect ? 'correct' : 'incorrect';
+                const icon = isCorrect ? '✓' : '✗';
+                
+                optionsHTML += `
+                    <div class="answer-option ${cssClass}">
+                        <strong>${icon} Option ${index + 1}:</strong> ${option}
+                    </div>
+                `;
+            });
+            
+            questionDetailContent.innerHTML = `
+                <div class="question-details">
+                    <div class="date-badge">${question.date}</div>
+                    <span class="subject-badge">${question.subject}</span>
+                    
+                    <h2>${question.question}</h2>
+                    
+                    <h3 style="color: #e60012;">Alle Antwortmöglichkeiten:</h3>
+                    <div class="all-answers">
+                        ${optionsHTML}
+                    </div>
+                    
+                    <div style="background-color: #222; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <h3 style="color: #4caf50; margin-top: 0;">Erklärung:</h3>
+                        <p>${question.explanation}</p>
+                    </div>
+                    
+                    <div class="stats-reward">
+                        <div class="reward-label">Belohnung:</div>
+                        <span class="knowledge-icon">🧠</span>${question.reward}
+                    </div>
+                </div>
+            `;
+            
+            questionModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Modal schließen
+        function closeModal() {
+            questionModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event-Listener
+        closeBtn.addEventListener('click', closeModal);
+        
+        window.addEventListener('click', (event) => {
+            if (event.target === questionModal) {
+                closeModal();
+            }
+        });
+        
+        // Tab-Filter-Wechsel
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                activeFilter = tab.getAttribute('data-filter');
+                renderQuestions();
+            });
+        });
+        
+        // Suchfunktion
+        searchBox.addEventListener('input', () => {
+            renderQuestions();
+        });
+        
+        // Escape-Taste zum Schließen des Modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && questionModal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Seite initialisieren
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestions();
+        });
+    </script>
+</body>
+</html>

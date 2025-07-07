@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona 5 Royal - Palaces</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #e60012;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 300px;
+        }
+        nav {
+            background-color: #1a1a1a;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #e60012;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e60012;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .palaces {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .palace-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .palace-card:hover {
+            transform: translateY(-5px);
+        }
+        .palace-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .palace-preview {
+            padding: 20px;
+            text-align: center;
+        }
+        .palace-preview h2 {
+            color: #e60012;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .palace-info {
+            padding: 20px;
+            display: none; /* Information standardmäßig verstecken */
+        }
+        .palace-info h2 {
+            color: #e60012;
+            margin-top: 0;
+        }
+        .palace-info h3 {
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .palace-info ul {
+            padding-left: 20px;
+        }
+        .palace-info li {
+            margin-bottom: 5px;
+        }
+        .palace-ruler {
+            font-weight: bold;
+            color: #e60012;
+        }
+        .reveal-btn {
+            background-color: #e60012;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        .reveal-btn:hover {
+            background-color: #ff3341;
+        }
+        .hide-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        .hide-btn:hover {
+            background-color: #777;
+        }
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/General/Logo.png" alt="Persona 5 Royal Logo" class="logo">
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="palaces.html">Palaces</a>
+        <a href="compendium.html">Persona Compendium</a>
+        <a href="confidants.html">Confidants/Social Links</a>
+        <a href="schoolanswers.html">Class answers</a>
+    </nav>
+    
+    <div class="container">
+        <h1>The Palaces in Persona 5 Royal</h1>
+        
+        <div class="palaces">
+            <!-- Kamoshida's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/castle.png" alt="Palast 1">
+                <div class="palace-preview">
+                    <h2>Palace 1: Castle</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-1')">Show details</button>
+                </div>
+                <div id="palace-1" class="palace-info">
+                    <h2>Kamoshidas Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Suguru Kamoshida</p>
+                    <p><span class="palace-ruler">Distortion:</span> Castle of Lust</p>
+                    <p>The Shujin Academy, which appears in Kamoshida's perception as his personal castle in which he rules as king.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Golden medal</li>
+                        <li>Volleyball key</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Asmodeus (Kamoshidas Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-1')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Madarame's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/museum.png" alt="Palast 2">
+                <div class="palace-preview">
+                    <h2>Palace 2: Museum</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-2')">Show details</button>
+                </div>
+                <div id="palace-2" class="palace-info">
+                    <h2>Madarames Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Ichiryusai Madarame</p>
+                    <p><span class="palace-ruler">Distortion:</span> Museum of Vanity</p>
+                    <p>Madarame's house, which he perceives as an opulent museum in which his "works of art" are exhibited.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Painting key</li>
+                        <li>Laser cruiser</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Azazel (Madarames Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-2')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Kaneshiro's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/bank.png" alt="Palast 3">
+                <div class="palace-preview">
+                    <h2>Palace 3: Flying Bank</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-3')">Show details</button>
+                </div>
+                <div id="palace-3" class="palace-info">
+                    <h2>Kaneshiros Palace</h2>
+                    <p><span class="palace-ruler">Palast-ruler:</span> Junya Kaneshiro</p>
+                    <p><span class="palace-ruler">Distortion:</span> Bank of Gluttony</p>
+                    <p>A massive bank hovering over Shibuya, viewing the city as its personal source of money.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>PIN-Numbers</li>
+                        <li>Bank key</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Bael (Kaneshiros Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-3')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Futaba's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/pyramid.png" alt="Palast 4">
+                <div class="palace-preview">
+                    <h2>Palace 4: Pyramid</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-4')">Show details</button>
+                </div>
+                <div id="palace-4" class="palace-info">
+                    <h2>Futabas Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Futaba Sakura</p>
+                    <p><span class="palace-ruler">Distortion:</span> Pyramid of Wrath</p>
+                    <p>An Egyptian pyramid in a desert, symbolizing Futaba's isolation and self-blame.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Anubis-key</li>
+                        <li>Sacred Treasure Map</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Sphinx (Futabas cognitive self)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-4')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Okumura's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/space.png" alt="Palast 5">
+                <div class="palace-preview">
+                    <h2>Palace 5: Space station</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-5')">Show details</button>
+                </div>
+                <div id="palace-5" class="palace-info">
+                    <h2>Okumuras Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Kunikazu Okumura</p>
+                    <p><span class="palace-ruler">Distortion:</span> Spaceport of Greed</p>
+                    <p>A futuristic space station that represents Okumura's ambitions and his treatment of his employees as robots.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Biometric card</li>
+                        <li>MDL-Core</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Mammon (Okumuras Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-5')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Sae's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/casino.png" alt="Palast 6">
+                <div class="palace-preview">
+                    <h2>Palace 6: Casino</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-6')">Show details</button>
+                </div>
+                <div id="palace-6" class="palace-info">
+                    <h2>Sae's Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Sae Niijima</p>
+                    <p><span class="palace-ruler">Distortion:</span> Casino of Envy/Jealousy</p>
+                    <p>A glitzy casino that represents Sae's view that life is an unfair game of chance and that the justice system is rigged.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>game chips</li>
+                        <li>High security key</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Leviathan (Saes Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-6')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Shido's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/ship.png" alt="Palace 7">
+                <div class="palace-preview">
+                    <h2>Palace 7: Cruise ship</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-7')">Show details</button>
+                </div>
+                <div id="palace-7" class="palace-info">
+                    <h2>Shido's Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Masayoshi Shido</p>
+                    <p><span class="palace-ruler">Distortion:</span> Cruiser of Pride</p>
+                    <p>A gigantic cruise ship sailing through a sunken Japan symbolizes Shido's indifference to the country as he sets course for his own future.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Letters of Recommendation</li>
+                        <li>Captain's Key</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Samael (Shidos Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-7')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Mementos Depths -->
+            <div class="palace-card">
+                <img src="images/Palaces/depth.png" alt="Palace 8">
+                <div class="palace-preview">
+                    <h2>Palace 8: Mementos Tiefen</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-8')">Show details</button>
+                </div>
+                <div id="palace-8" class="palace-info">
+                    <h2>Mementos Depths</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Collective unconscious of humanity</p>
+                    <p><span class="palace-ruler">Distortion:</span> Prison of Sloth/Regression/Acedia</p>
+                    <p>The deepest levels of Mementos, revealing the prison of regression - a symbol of humanity's desire to be controlled.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>Prison-Key</li>
+                        <li>Holy Chalice</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Yaldabaoth (God of control)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-8')">Hide details</button>
+                </div>
+            </div>
+            
+            <!-- Maruki's Palace -->
+            <div class="palace-card">
+                <img src="images/Palaces/maruki.png" alt="Palace 9">
+                <div class="palace-preview">
+                    <h2>Palace 9: Laboratory of Happiness</h2>
+                    <button class="reveal-btn" onclick="toggleInfo(this, 'palace-9')">Show details</button>
+                </div>
+                <div id="palace-9" class="palace-info">
+                    <h2>Maruki's Palace</h2>
+                    <p><span class="palace-ruler">Palace-ruler:</span> Takuto Maruki</p>
+                    <p><span class="palace-ruler">Distortion:</span> Center of Melancholy/Laboratory of Sorrow</p>
+                    <p>A shiny, futuristic research center that represents Maruki's desire to create a reality where everyone is happy.</p>
+                    <h3>Important Items:</h3>
+                    <ul>
+                        <li>ID-Card</li>
+                        <li>Stem cells</li>
+                    </ul>
+                    <h3>Boss:</h3>
+                    <p>Azathoth/Adam Kadmon (Marukis Shadow)</p>
+                    <button class="hide-btn" onclick="hideInfo(this, 'palace-9')">Hide details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>This Persona 5 Royal fan site is an unofficial project. All rights to Persona 5 Royal are owned by ATLUS and SEGA.</p>
+        <p>© 2025 Persona 5 Royal Fansite</p>
+    </footer>
+
+    <script>
+        function toggleInfo(button, palaceId) {
+            const palaceInfo = document.getElementById(palaceId);
+            const palacePreview = button.parentElement;
+            
+            palaceInfo.style.display = 'block';
+            palacePreview.style.display = 'none';
+        }
+        
+        function hideInfo(button, palaceId) {
+            const palaceInfo = document.getElementById(palaceId);
+            const palacePreview = palaceInfo.previousElementSibling;
+            
+            palaceInfo.style.display = 'none';
+            palacePreview.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

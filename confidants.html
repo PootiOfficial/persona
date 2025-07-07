@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona 5 Royal - Confidants/Social Links</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #e60012;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 300px;
+        }
+        nav {
+            background-color: #1a1a1a;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #e60012;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #e60012;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .confidants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .confidant-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .confidant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0,0,0,0.5);
+        }
+        .confidant-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            object-position: top;
+        }
+        .confidant-info {
+            padding: 20px;
+        }
+        .confidant-info h2 {
+            color: #e60012;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .confidant-info p {
+            margin: 5px 0;
+        }
+        .arcana-badge {
+            display: inline-block;
+            background-color: #e60012;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #777;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #e60012;
+        }
+        .confidant-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        .confidant-image {
+            background-color: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .confidant-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confidant-stats h2 {
+            color: #e60012;
+            margin-top: 0;
+        }
+        .confidant-stats h3 {
+            color: #e60012;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-top: 25px;
+        }
+        .rank-section {
+            margin-top: 20px;
+        }
+        .rank-item {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .rank-header {
+            display: flex;
+            justify-content: space-between;
+            color: #e60012;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .rank-ability {
+            background-color: #333;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .rank-ability-name {
+            color: #e60012;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .availability {
+            margin-top: 10px;
+        }
+        .availability span {
+            font-weight: bold;
+            color: #e60012;
+        }
+        .gift-preferences {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .gift-item {
+            background-color: #222;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .love-interest {
+            background-color: #e60012;
+            color: white;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: transparent;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: #e60012;
+            border-bottom: 3px solid #e60012;
+        }
+        .tab:hover {
+            color: #e60012;
+        }
+        /* Animation für Karten */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        /* Stilisierung für Tag-Label innerhalb von Confidant-Karten */
+        .confidant-tag {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .confidant-tag.romance {
+            background-color: #e63946;
+        }
+        .confidant-tag.phantom-thieves {
+            background-color: #457b9d;
+        }
+        .confidant-tag.royal {
+            background-color: #9d4edd;
+        }
+        /* Suchfeld */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-box {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            width: 300px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #e60012;
+            box-shadow: 0 0 8px rgba(230, 0, 18, 0.5);
+        }
+        /* Responsive Anpassungen */
+        @media (max-width: 768px) {
+            .confidant-details {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                justify-content: flex-start;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/General/Logo.png" alt="Persona 5 Royal Logo" class="logo">
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="palaces.html">Paläste</a>
+        <a href="compendium.html">Persona Compendium</a>
+        <a href="confidants.html">Confidants/Social Links</a>
+        <a href="schoolanswers.html">Class answers</a>
+    </nav>
+    
+    <div class="container">
+        <h1>Confidants / Social Links</h1>
+        
+        <div class="intro">
+            <p>In Persona 5 Royal bilden die Confidants (Social Links) einen wesentlichen Teil des Spiels. Durch die Vertiefung dieser Beziehungen schaltest du mächtige Fähigkeiten frei und erhältst Boni bei der Persona-Fusion.</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="confidant-search" class="search-box" placeholder="Suche nach Confidant oder Arcana...">
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" data-filter="all">Alle Confidants</button>
+            <button class="tab" data-filter="phantom-thieves">Phantom Thieves</button>
+            <button class="tab" data-filter="romance">Romanzen-Optionen</button>
+            <button class="tab" data-filter="royal">Royal Exklusiv</button>
+        </div>
+        
+        <div class="confidants-grid" id="confidants-grid">
+            <!-- Confidants werden hier dynamisch eingefügt -->
+        </div>
+    </div>
+    
+    <!-- Modal für Confidant-Details -->
+    <div id="confidant-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="confidant-detail-content">
+                <!-- Confidant-Details werden hier dynamisch eingefügt -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Diese Persona 5 Royal Fanseite ist ein inoffizielles Projekt. Alle Rechte an Persona 5 Royal liegen bei ATLUS und SEGA.</p>
+        <p>© 2025 Persona 5 Royal Fanseite</p>
+    </footer>
+    
+    <script>
+        // Hier werden deine Confidant-Daten eingefügt
+        const confidants = [
+        {
+        id: 1,
+        name: "Ryuji Sakamoto",
+        image: "images/Confidants/Ryuji.png",
+        tallimage: "images/Confidants/Ryuji2.png",
+        arcana: "Chariot",
+        category: ["phantom-thieves"],
+        location: "Schule oder Arcade",
+        availability: "Jeden Tag",
+        romance: false,
+        description: "Ryuji Sakamoto ist ein impulsiver und lauter junger Mann mit einem guten Herzen. Trotz seines rebellischen Auftretens ist er loyal, mutig und kämpft entschlossen für Gerechtigkeit und seine Freunde.",
+        abilities: [
+            { rank: 2, name: "Punk Talk", description: "Wenn du in Verhandlungen mit einem Schatten scheiterst, bekommst du möglicherweise eine zweite Chance." },
+            { rank: 3, name: "Follow Up", description: "Chance, einen Folgeangriff auszuführen, wenn Jokers Angriff den Feind nicht niederstreckt." },
+            { rank: 4, name: "Stealth Dash", description: "Verringert die Wahrscheinlichkeit, dass Sie beim Sprinten im Metaverse gefunden werden." },
+            { rank: 6, name: "Harisen Recovery", description: "Chance, Status-Effekte von Gruppenmitgliedern zu heilen." },
+            { rank: 7, name: "Insta-kill", description: "Wenn Sie auf einen schwachen Schatten treffen, können Sie ihn sofort zerstören." },
+            { rank: 8, name: "Endure", description: "Chance, einem ansonsten tödlichen Angriff mit 1 verbleibenden HP standzuhalten." },
+            { rank: 9, name: "Protect", description: "Chance, Joker vor einem ansonsten tödlichen Angriff zu schützen." },
+            { rank: 10, name: "Second Awakening", description: "Verwandelt Ryujis Persona in einen mythologischen Trickster." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Keine Tipps." },
+            { rank: 3, description: "Keine Tipps." },
+            { rank: 4, description: "Keine Tipps." },
+            { rank: 5, description: "Erst Verfügbar am 6. Mai." },
+            { rank: 6, description: "Keine Tipps." },
+            { rank: 7, description: "Mai - 18., 20., 25. oder 27.<br>Juni - 22. oder 29.<br>Juli - 1. oder 6.<br>August - 12., 17.<br>September - 21.<br>Oktober - 2., 7.<br>November - 2., 4., 9., 11., 16. und 30.<br>Dezember - 2., 7. und 9.<br>January - 13."
+    },
+            { rank: 8, description: "Keine Tipps." },
+            { rank: 9, description: "Keine Tipps." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Wrist Weights",
+            "Silver Bangle",
+            "Dragon Sword Keychain",
+            "Sporty Sunglasses",
+            "Cup Noodle Set",
+            "Robot Vacuum Cleaner",
+            "Snack Pack"
+        ]
+    },
+    {
+        id: 2,
+        name: "Takuto Maruki",
+        image: "images/Confidants/Maruki.png",
+        tallimage: "images/Confidants/Maruki.png",
+        arcana: "Councillor",
+        category: ["royal"],
+        location: "Schule",
+        availability: "Montag, Dienstag, Mittwoch und Freitag",
+        romance: false,
+        description: "Takuto Maruki ist ein freundlicher, einfühlsamer Schulpsychologe an der Shujin Academy mit einem ausgeprägten Wunsch, anderen zu helfen. Trotz seiner etwas unbeholfenen Art besitzt er ein tiefes Verständnis für menschliches Leid und eine einnehmende Wärme, die Vertrauen schafft.",
+        abilities: [
+            { rank: 2, name: "Detox X", description: "Wenn Joker von einer Krankheit befallen wird, kann es sein, dass er sich sofort erholt." },
+            { rank: 3, name: "Flow", description: "Chance, zu Beginn des Kampfes die Effekte von „Ansturm“ und „Konzentration“ zu erhalten." },
+            { rank: 5, name: "Mindfulness", description: "Chance, Jokers SP wiederherzustellen, wenn es niedrig ist." },
+            { rank: 7, name: "Flow Boost", description: "Erhöht die Erfolgschancen von Flow." },
+            { rank: 9, name: "Detox DX", description: "Erhöht die Erfolgschancen von Detox X." },
+            { rank: 10, name: "Wakefulness", description: "Erhöht die Mindfulness wiederhergestellte SP." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Automatisch." },
+            { rank: 3, description: "Nicht bei Regentagen." },
+            { rank: 4, description: "Keine Tipps." },
+            { rank: 5, description: "Keine Tipps." },
+            { rank: 6, description: "Rang 6 ist erst am 20. September verfügbar." },
+            { rank: 7, description: "Keine Tipps." },
+            { rank: 8, description: "Keine Tipps." },
+            { rank: 9, description: "Rang 9 muss bis zum Ende des 17. November abgeschlossen sein." },
+            { rank: 10, description: "Automatisch wenn Rang 9 abgeschlossen wurde." }
+        ],
+        gifts: [
+            "Fountain Pen",
+            "Noisy Alarm Clock",
+            "Omni-Vitamin",
+            "Mini-Cactus",
+            "48 Sided 3D Puzzle"
+        ]
+    },
+    {
+        id: 3,
+        name: "Tae Takemi",
+        image: "images/Confidants/Tae.png",
+        tallimage: "images/Confidants/Tae.png",
+        arcana: "Death",
+        category: ["romance"],
+        location: "Klinik in Yongen-Jaya",
+        availability: "Jeden Tag",
+        romance: false,
+        description: "Tae Takemi ist eine unkonventionelle Ärztin, die eine kleine Klinik in Yongen-Jaya betreibt. Mit ihrem gotischen Stil und ihrer direkten Art wirkt sie zunächst abweisend, verbirgt jedoch ein tiefes Pflichtgefühl als Medizinerin.",
+        abilities: [
+            { rank: 1, name: "Rejuvenation", description: "Erhöht die Auswahl an Heilmitteln in der Klinik." },
+            { rank: 3, name: "Sterilization", description: "Fügt der Klinik weitere Heilmittel hinzu." },
+            { rank: 5, name: "Immunization", description: "Fügt dem Inventar der Klinik unterstützende Artikel hinzu." },
+            { rank: 7, name: "Discount", description: "Senkt den Preis für alle in der Klinik verkauften Artikel." },
+            { rank: 10, name: "Resuscitation", description: "Erhöht die Auswahl an Wiederbelebungsartikeln in der Klinik." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Rang 2: Mut" },
+            { rank: 3, description: "Keine Tipps." },
+            { rank: 4, description: "Keine Tipps." },
+            { rank: 5, description: "Keine Tipps." },
+            { rank: 6, description: "Rang 6 ist erst am 20. September verfügbar." },
+            { rank: 7, description: "Keine Tipps." },
+            { rank: 8, description: "Rang 4: Charme & Anfrage „Bad Medicine“ abschließen." },
+            { rank: 9, description: "Keine Tipps." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Black Mug",
+            "Mini-Cactus",
+            "48 Sided 3D Puzzle"
+        ]
+    },
+    {
+        id: 4,
+        name: "Ichiko Ohya",
+        image: "images/Confidants/ohya.png",
+        tallimage: "images/Confidants/ohya.png",
+        arcana: "Devil",
+        category: ["romance"],
+        location: "Crossroads Bar in Shinjuku",
+        availability: "Jeden Tag (Nachts)",
+        romance: false,
+        description: "Ichiko Ohya ist eine scharfsinnige Journalistin mit Vorliebe für Alkohol und einer lockeren Persönlichkeit. Hinter ihrer entspannten Fassade verbirgt sich eine entschlossene Reporterin, die hartnäckig nach der Wahrheit sucht, selbst wenn es ihre Karriere gefährdet.",
+        abilities: [
+            { rank: 1, name: "Rumor-filled Scoop", description: "Verringert die Erhöhung des Sicherheitsniveaus und verringert das Sicherheitsniveau über Nacht weiter." },
+            { rank: 4, name: "Shocking Scoop", description: "Erzielt die gleichen Effekte wie Rumor-filled Scoop, jedoch mit größerer Wirkung." },
+            { rank: 7, name: "Outrageous Scoop", description: "Bietet die gleichen Effekte wie Rumor-filled Scoop, aber mit unglaublicher Wirkung." },
+            { rank: 10, name: "Legendary Scoop", description: "Das Sicherheitsniveau wird nicht erhöht und über Nacht auf Null sinken." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Keine Tipps." },
+            { rank: 3, description: "Keine Tipps." },
+            { rank: 4, description: "Keine Tipps." },
+            { rank: 5, description: "Keine Tipps." },
+            { rank: 6, description: "Keine Tipps." },
+            { rank: 7, description: "Keine Tipps." },
+            { rank: 8, description: "Anfrage „Fighting For Truth in Journalism“ abschließen." },
+            { rank: 9, description: "Keine Tipps." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Fountain Pen",
+            "Omni-Vitamin",
+            "Noisy Alarm Clock",
+            "Digital Camera"
+        ]
+    },
+    {
+        id: 5,
+        name: "Yusuke Kitagawa",
+        image: "images/Confidants/Yusuke.png",
+        tallimage: "images/Confidants/Yusuke2.png",
+        arcana: "Emperor",
+        category: ["phantom-thieves"],
+        location: "Shibuya Underground Station",
+        availability: "Jeden Tag",
+        romance: false,
+        description: "Yusuke Kitagawa ist ein exzentrischer Kunststudent mit außergewöhnlichem Talent und unkonventionellem Blick auf die Welt. Sein kompromissloser Fokus auf Schönheit und Ästhetik lässt ihn oft alltägliche Belange wie Geld oder soziale Normen vergessen, während seine tiefe Leidenschaft für die Kunst sein Handeln und seine ungewöhnliche Ausdrucksweise prägt.",
+        abilities: [
+            { rank: 1, name: "Card Duplication", description: "Ermöglicht Yusuke, Fertigkeitskarten zu duplizieren." },
+            { rank: 3, name: "Follow Up", description: "Chance, einen Folgeangriff auszuführen, wenn Jokers Angriff den Feind nicht niederstreckt." },
+            { rank: 4, name: "Art Talk", description: "Wenn die Verhandlung mit einem einzelnen Schatten fehlschlägt, können Sie es erneut versuchen." },
+            { rank: 5, name: "Card Creation", description: "Ermöglicht Yusuke, eine beliebige Fertigkeitskarte zu erstellen, die er zuvor einmal kopiert hat." },
+            { rank: 6, name: "Harisen Recovery	", description: "Chance, Status-Effekte von Gruppenmitgliedern zu heilen." },
+            { rank: 7, name: "Live Painting", description: "Ermöglicht Yusuke, Kartenduplizierung und Kartenerstellung vor Ort und in Palästen zu verwenden." },
+            { rank: 8, name: "Endure", description: "Chance, einem ansonsten tödlichen Angriff mit 1 verbleibenden HP standzuhalten." },
+            { rank: 9, name: "Protect", description: "Chance, Joker vor einem ansonsten tödlichen Angriff zu schützen." },
+            { rank: 10, name: "Second Awakening", description: "Verwandelt Yusukes Persona in einen mythologischen Trickster." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Keine Tipps." },
+            { rank: 3, description: "Keine Tipps." },
+            { rank: 4, description: "Keine Tipps." },
+            { rank: 5, description: "Keine Tipps." },
+            { rank: 6, description: "Rang 4: Geschicklichkeit" },
+            { rank: 7, description: "Keine Tipps." },
+            { rank: 8, description: "Keine Tipps." },
+            { rank: 9, description: "Keine Tipps." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Glass Vase",
+            "Silver Bangle",
+            "Uji Matcha Flan",
+            "Truffles",
+            "Castella"
+        ]
+    },
+    {
+        id: 6,
+        name: "Haru Okumura",
+        image: "images/Confidants/Haru.png",
+        tallimage: "images/Confidants/Haru2.png",
+        arcana: "Empress",
+        category: ["phantom-thieves", "romance"],
+        location: "Dach der Shujin-Akademie",
+        availability: "Jeden Tag außer Sonntag und wenn es regnet.",
+        romance: false,
+        description: "Haru Okumura ist eine höfliche und sanftmütige Erbin eines großen Lebensmittelkonzerns mit überraschend rebellischer Seele. Hinter ihrer zarten Erscheinung und formellen Sprache verbirgt sich sowohl eine Leidenschaft für Gartenarbeit als auch eine unerwartete Kampfeslust, die im starken Kontrast zu ihrem wohlerzogenen Auftreten steht.",
+        abilities: [
+            { rank: 1, name: "Cultivation", description: "Ermöglicht Ihnen, mit Haru auf dem Dach der Shujin-Akademie Gemüse anzubauen." },
+            { rank: 3, name: "Follow Up", description: "Chance, einen Folgeangriff auszuführen, wenn Jokers Angriff den Feind nicht niederstreckt." },
+            { rank: 4, name: "Celeb Talk", description: "Wenn die Verhandlungen innerhalb einer Gruppe von Schatten scheitern, können Sie es erneut versuchen." },
+            { rank: 5, name: "Bumper Crop", description: "Erhöht den gesamten Gemüseertrag bei einer einzigen Ernte." },
+            { rank: 6, name: "Harisen Recovery	", description: "Chance, Status-Effekte von Gruppenmitgliedern zu heilen." },
+            { rank: 7, name: "Soil Improvement", description: "Verringert die Gesamtzeit, die für den Gemüseanbau benötigt wird." },
+            { rank: 8, name: "Endure", description: "Chance, einem ansonsten tödlichen Angriff mit 1 verbleibenden HP standzuhalten." },
+            { rank: 9, name: "Protect", description: "Chance, Joker vor einem ansonsten tödlichen Angriff zu schützen." },
+            { rank: 10, name: "Second Awakening", description: "Verwandelt Harus Persona in einen mythologischen Trickster." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Keine Tipps." },
+            { rank: 2, description: "Keine Tipps." },
+            { rank: 3, description: "Keine Tipps." },
+            { rank: 4, description: "Rang MAX: Geschicklichkeit" },
+            { rank: 5, description: "Keine Tipps." },
+            { rank: 6, description: "Keine Tipps." },
+            { rank: 7, description: "Keine Tipps." },
+            { rank: 8, description: "Keine Tipps." },
+            { rank: 9, description: "Rang 9 kann nicht vor dem 25. November begonnen werden." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Flower Basket",
+            "Wrist Weights",
+            "Glass Vase",
+            "Watercolor Postcard"
+        ]
+    },
+    {
+        id: 7,
+        name: "Kasumi Yoshizawa",
+        image: "images/Confidants/Kasumi.png",
+        tallimage: "images/Confidants/Kasumi2.png",
+        arcana: "Faith",
+        category: ["phantom-thieves", "royal", "romance"],
+        location: "Platzhalter",
+        availability: "Platzhalter",
+        romance: false,
+        description: "Kasumi Yoshizawa ist eine außergewöhnlich begabte Gymnastin mit einem strahlenden Selbstvertrauen und einer positiven Einstellung. Als Ehrenschülerin an der Shujin Academy beeindruckt sie mit ihrer Zielstrebigkeit, Eleganz und ihrem freundlichen Wesen.",
+        abilities: [
+            { rank: 2, name: "Tumbling", description: "Ermöglicht es Ihnen, zu vermeiden, in Palästen von Feinden umzingelt zu werden." },
+            { rank: 4, name: "Chaînés Hook", description: "Ermöglicht es Ihnen, aus der Ferne mit dem Enterhaken anzugreifen. Schatten können beim Kampfeintritt mit Angst, Verwirrung oder Schwindel behaftet sein." },
+            { rank: 6, name: "Follow Up & Fitness Talk", description: "Chance, einen Folgeangriff auszuführen, wenn Jokers Angriff den Feind nicht niederstreckt & wenn die Verhandlung mit irgendeiner Art von Schatten fehlschlägt, können Sie es erneut versuchen." },
+            { rank: 7, name: "Harisen Recovery", description: "Chance, Status-Effekte von Gruppenmitgliedern zu heilen." },
+            { rank: 8, name: "Endure", description: "Chance, einem ansonsten tödlichen Angriff mit 1 verbleibenden HP standzuhalten." },
+            { rank: 9, name: "Protect", description: "Chance, Joker vor einem ansonsten tödlichen Angriff zu schützen." },
+            { rank: 10, name: "Second Awakening", description: "Verwandelt Kasumis Persona in einen mythologischen Trickster." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Automatisch am 30. Mai." },
+            { rank: 2, description: "Am 8. Juni verfügbar." },
+            { rank: 3, description: "Am 29. Juni verfügbar." },
+            { rank: 4, description: "Am 7. Juli verfügbar." },
+            { rank: 5, description: "Am 28. Juli verfügbar. Rang 5.5 am 9. Januar" },
+            { rank: 6, description: "Am 13. Januar verfügbar." },
+            { rank: 7, description: "Am 14. Januar verfügbar." },
+            { rank: 8, description: "Am 16. Januar verfügbar." },
+            { rank: 9, description: "Am 18. Januar verfügbar." },
+            { rank: 10, description: "Keine Tipps." }
+        ],
+        gifts: [
+            "Crimson Lipstick",
+            "Mini-Cactus",
+            "Bath of Roses",
+            "Face Beautifier",
+            "Luxury Aroma Set"
+        ]
+    },
+        {
+        id: 8,
+        name: "Igor",
+        image: "images/Confidants/Igor.png",
+        tallimage: "images/Confidants/Igor2.png",
+        arcana: "Fool",
+        category: [],
+        location: "Velvet Room",
+        availability: "Story progession",
+        romance: false,
+        description: "Igor ist eine mysteriöse, übernatürliche Figur mit langer Nase und tiefer Stimme. Er erscheint in der Velvet Room, wo er als Mentor dient und Menschen dabei hilft, ihr inneres Potenzial durch die Fusion von Personas zu entfalten. Seine wahre Natur bleibt lange im Verborgenen.",
+        abilities: [
+            { rank: 1, name: "Wild Talk & Arcana Burst", description: "Ermöglicht Ihnen, nach der Durchführung eines Überfalls mit Schatten zu verhandeln & Verdienen Sie Bonus-EXP, wenn Sie Personas verschmelzen, basierend auf ihrem Arcana-Vertrautenrang." },
+            { rank: 2, name: "Third Eye", description: "Sehen Sie Dinge, die für das bloße Auge normalerweise unsichtbar sind." },
+            { rank: 3, name: "Power Stock", description: "Erhöht Ihren Persona-Vorrat auf 8 Slots." },
+            { rank: 5, name: "Power Stock", description: "Erhöht Ihren Persona-Vorrat auf 10 Slots." },
+            { rank: 6, name: "High Arcana Burst", description: "Erhöht den durch Arcana Burst gewährten EXP-Bonus." },
+            { rank: 8, name: "Ultra Stock", description: "Erhöht Ihren Persona-Vorrat auf 12 Slots." },
+            { rank: 10, name: "Max Arcana Burst", description: "Erhöht den durch Arcana Burst gewährten EXP-Bonus erheblich." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Story event 12. April." },
+            { rank: 2, description: "Story event, nach erster Besuch von Kamoshidas Palast." },
+            { rank: 3, description: "Story event 5. Mai." },
+            { rank: 4, description: "Story event, nach Maderames Palast." },
+            { rank: 5, description: "Story event 11. Juni" },
+            { rank: 6, description: "Story event, nach Kaneshiros Palast." },
+            { rank: 7, description: "Story event 22. August." },
+            { rank: 8, description: "Story event 31. August." },
+            { rank: 9, description: "Story event 11. Oktober." },
+            { rank: 10, description: "Story event 24. Dezember." }
+        ],
+        gifts: [
+            "Keine"
+        ]
+    },
+    {
+        id: 12,
+        name: "Yoshida Toranosuke",
+        arcana: "Sun",
+        category: [],
+        location: "Shibuya Station Square",
+        availability: "Abend (nur Sonntage)",
+        romance: false,
+        description: "Ein politischer Redner in Shibuya, der in der Vergangenheit wegen eines Skandals in Ungnade gefallen ist. Er trägt den Spitznamen 'No-Good Tora'. Als erfahrener Redner lehrt er dich wichtige Fähigkeiten in Verhandlungen mit Shadows.",
+        abilities: [
+            { rank: 1, name: "Fundraising", description: "Erhöht die Menge an Geld, die von Shadows erhalten wird." },
+            { rank: 3, name: "Diplomacy", description: "Ermöglicht erfolgreiche Verhandlungen mit höherstufigen Shadows." },
+            { rank: 5, name: "Charismatic Speech", description: "Erhöht die Chance, dass Shadows während Verhandlungen um ihr Leben bitten." },
+            { rank: 7, name: "Manipulation", description: "Ermöglicht das erfolgreiche Rekrutieren von Shadows selbst nach einem Gelderzwingungsversuch." },
+            { rank: 10, name: "Hail Mary", description: "Gibt dir eine zweite Chance bei fehlgeschlagenen Verhandlungen mit Shadows." }
+        ],
+        rankUp: [
+            { rank: 1, description: "Sprich mit Yoshida am Sonntag-Abend in Shibuya." },
+            { rank: 2, description: "Wähle 'Ich werde dein Assistent sein' bei der ersten Gesprächsoption." },
+            { rank: 3, description: "Unterstütze Yoshida bei seinem Gespräch mit dem alten Mann, der ihn konfrontiert." },
+            { rank: 4, description: "Verteidige Yoshida gegen die Vorwürfe des jungen Politikers." },
+            { rank: 5, description: "Ermuntere Yoshida, sich gegen die falschen Anschuldigungen zu wehren." },
+            { rank: 6, description: "Stehe zu Yoshida, als die Reporter ihm negative Fragen stellen." },
+            { rank: 7, description: "Teile Yoshidas Meinung über die Notwendigkeit der Veränderung im politischen System." },
+            { rank: 8, description: "Sprich mit Yoshidas ehemaligem Mentor und höre aufmerksam zu." },
+            { rank: 9, description: "Unterstütze Yoshida bei seiner Entscheidung, die Wahrheit über den Skandal zu sagen." },
+            { rank: 10, description: "Höre Yoshidas abschließender Rede zu und nimm seine Lehren an." }
+        ],
+        gifts: [
+            "Japanische Süßigkeiten",
+            "Taschentuch",
+            "Duftender Tee",
+            "Krawattennadel"
+        ]
+    },
+    {
+        id: 999,
+        name: "Platzhalter",
+        image: "images/Confidants/",
+        tallimage: "images/Confidants/",
+        arcana: "Platzhalter",
+        category: ["Platzhalter"],
+        location: "Platzhalter",
+        availability: "Platzhalter",
+        romance: false,
+        description: "Platzhalter",
+        abilities: [
+            { rank: 1, name: "", description: "" },
+            { rank: 2, name: "", description: "" },
+            { rank: 3, name: "", description: "" },
+            { rank: 5, name: "", description: "" },
+            { rank: 6, name: "", description: "" },
+            { rank: 8, name: "", description: "" },
+            { rank: 10, name: "", description: "" }
+        ],
+        rankUp: [
+            { rank: 1, description: "" },
+            { rank: 2, description: "" },
+            { rank: 3, description: "" },
+            { rank: 4, description: "" },
+            { rank: 5, description: "" },
+            { rank: 6, description: "" },
+            { rank: 7, description: "" },
+            { rank: 8, description: "" },
+            { rank: 9, description: "" },
+            { rank: 10, description: "" }
+        ],
+        gifts: [
+            ""
+        ]
+    },
+];
+
+        // DOM-Elemente
+        const confidantsGrid = document.getElementById('confidants-grid');
+        const confidantModal = document.getElementById('confidant-modal');
+        const confidantDetailContent = document.getElementById('confidant-detail-content');
+        const closeBtn = document.querySelector('.close-btn');
+        const tabs = document.querySelectorAll('.tab');
+        const searchBox = document.getElementById('confidant-search');
+
+        // Aktiver Filter
+        let activeFilter = 'all';
+
+        // Confidant-Karten rendern
+        function renderConfidants() {
+            confidantsGrid.innerHTML = '';
+            
+            let filteredConfidants = confidants;
+            
+            // Filter anwenden
+            if (activeFilter !== 'all') {
+                filteredConfidants = confidants.filter(confidant => 
+                    confidant.category && confidant.category.includes(activeFilter)
+                );
+            }
+            
+            // Suchfilter anwenden
+            const searchTerm = searchBox.value.toLowerCase();
+            if (searchTerm) {
+                filteredConfidants = filteredConfidants.filter(confidant => 
+                    confidant.name.toLowerCase().includes(searchTerm) || 
+                    confidant.arcana.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Karten erstellen
+            filteredConfidants.forEach((confidant, index) => {
+                const confidantCard = document.createElement('div');
+                confidantCard.className = 'confidant-card fade-in';
+                confidantCard.style.animationDelay = `${index * 0.05}s`;
+                
+                // Tags vorbereiten
+                let tagsHTML = '';
+                if (confidant.category && confidant.category.length > 0) {
+                    confidant.category.forEach(cat => {
+                        tagsHTML += `<span class="confidant-tag ${cat}">${formatCategoryName(cat)}</span>`;
+                    });
+                }
+                
+                confidantCard.innerHTML = `
+                    <img src="${confidant.image}" alt="${confidant.name}">
+                    <div class="confidant-info">
+                        <div class="arcana-badge">${confidant.arcana}</div>
+                        <h2>${confidant.name}</h2>
+                        <p>${confidant.description.substring(0, 100)}...</p>
+                        <div class="tag-container">
+                            ${tagsHTML}
+                        </div>
+                    </div>
+                `;
+                
+                confidantCard.addEventListener('click', () => {
+                    openConfidantModal(confidant);
+                });
+                
+                confidantsGrid.appendChild(confidantCard);
+            });
+            
+            // Keine Ergebnisse anzeigen
+            if (filteredConfidants.length === 0) {
+                confidantsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Keine Confidants gefunden.</p>';
+            }
+        }
+
+        // Kategorie-Namen formatieren
+        function formatCategoryName(category) {
+            switch(category) {
+                case 'phantom-thieves': return 'Phantom Thief';
+                case 'romance': return '♥ Romanze möglich';
+                case 'royal': return 'Royal';
+                default: return category;
+            }
+        }
+
+        // Modal öffnen mit Details des ausgewählten Confidant
+        function openConfidantModal(confidant) {
+            // Fähigkeiten und Rangstufen vorbereiten
+            let abilitiesHTML = '';
+            if (confidant.abilities && confidant.abilities.length > 0) {
+                confidant.abilities.forEach(ability => {
+                    abilitiesHTML += `
+                        <div class="rank-item">
+                            <div class="rank-header">
+                                <span>Rang ${ability.rank}</span>
+                            </div>
+                            <div class="rank-ability">
+                                <div class="rank-ability-name">${ability.name}</div>
+                                <div>${ability.description}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Rang-Tipps vorbereiten
+            let rankUpHTML = '';
+            if (confidant.rankUp && confidant.rankUp.length > 0) {
+                confidant.rankUp.forEach(rank => {
+                    rankUpHTML += `
+                        <div class="rank-item">
+                            <div class="rank-header">
+                                <span>Rang ${rank.rank}</span>
+                            </div>
+                            <div>${rank.description}</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Geschenkpräferenzen vorbereiten
+            let giftsHTML = '';
+            if (confidant.gifts && confidant.gifts.length > 0) {
+                confidant.gifts.forEach(gift => {
+                    giftsHTML += `<div class="gift-item">${gift}</div>`;
+                });
+            }
+            
+            // Kategorien/Tags vorbereiten
+            let categoriesHTML = '';
+            if (confidant.category && confidant.category.length > 0) {
+                confidant.category.forEach(cat => {
+                    categoriesHTML += `<span class="confidant-tag ${cat}">${formatCategoryName(cat)}</span>`;
+                });
+            }
+            
+            confidantDetailContent.innerHTML = `
+                <div class="confidant-details">
+                    <div class="confidant-image">
+                        <img src="${confidant.tallimage}" alt="${confidant.name}">
+                    </div>
+                    <div class="confidant-stats">
+                        <h2>${confidant.name}</h2>
+                        <div class="arcana-badge">${confidant.arcana}</div>
+                        ${categoriesHTML}
+                        ${confidant.romance ? '<span class="love-interest">♥ Romanze möglich</span>' : ''}
+                        
+                        <p>${confidant.description}</p>
+                        
+                        <div class="availability">
+                            <span>Standort:</span> ${confidant.location}<br>
+                            <span>Verfügbarkeit:</span> ${confidant.availability}
+                        </div>
+                        
+                        <h3>Fähigkeiten & Boni</h3>
+                        <div class="rank-section">
+                            ${abilitiesHTML}
+                        </div>
+                        
+                        <h3>Rang-Progression Tipps</h3>
+                        <div class="rank-section">
+                            ${rankUpHTML}
+                        </div>
+                        
+                        <h3>Bevorzugte Geschenke</h3>
+                        <div class="gift-preferences">
+                            ${giftsHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            confidantModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Hintergrund-Scrolling verhindern
+        }
+
+        // Modal schließen
+        function closeModal() {
+            confidantModal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Scrolling wieder aktivieren
+        }
+
+        // Event-Listener
+        closeBtn.addEventListener('click', closeModal);
+        
+        // Schließen des Modals beim Klick außerhalb
+        window.addEventListener('click', (event) => {
+            if (event.target === confidantModal) {
+                closeModal();
+            }
+        });
+        
+        // Tab-Filter-Wechsel
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                activeFilter = tab.getAttribute('data-filter');
+                renderConfidants();
+            });
+        });
+        
+        // Suchfunktion
+        searchBox.addEventListener('input', () => {
+            renderConfidants();
+        });
+        
+        // Escape-Taste zum Schließen des Modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && confidantModal.style.display === 'block') {
+                closeModal();
+            }
+        });
+
+        // Seite initialisieren
+        document.addEventListener('DOMContentLoaded', () => {
+            renderConfidants();
+        });
+    </script>
+</body>
+</html>
